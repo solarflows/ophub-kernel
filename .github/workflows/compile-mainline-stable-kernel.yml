@@ -13,7 +13,7 @@ on:
       kernel_source:
         description: "Select the kernel source"
         required: false
-        default: "unifreq"
+        default: "solarflows"
         type: choice
         options:
           - unifreq
@@ -77,7 +77,7 @@ on:
       kernel_sign:
         description: "Set the kernel custom signature"
         required: false
-        default: "-ophub"
+        default: "-solarflows"
         type: choice
         options:
           - -ophub
@@ -91,6 +91,7 @@ on:
           - -autumn-harvesting
           - -winter-storing
           - -yourname
+          - -solarflows
       kernel_config:
         description: "Set the path of kernel .config"
         required: false
@@ -98,7 +99,7 @@ on:
         type: choice
         options:
           - kernel-config/release/stable
-          - false
+          - "false"
 
 env:
   TZ: Etc/UTC
@@ -122,6 +123,12 @@ jobs:
           sudo rm -rf /usr/share/dotnet /usr/local/lib/android 2>/dev/null
           sudo swapoff -a
           sudo rm -f /swapfile /mnt/swapfile
+
+          # 清除所有缓存
+          sudo rm -rf /var/lib/apt/lists/*
+          sudo apt clean
+          sudo apt autoclean
+
           sudo -E apt-get -y update
           sudo -E apt-get -y purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
           sudo -E apt-get -y install $(curl -fsSL https://ophub.org/ubuntu2404-build-armbian-depends)
